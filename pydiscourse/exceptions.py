@@ -11,3 +11,8 @@ class DiscourseServerError(DiscourseError):
 
 class DiscourseClientError(DiscourseError):
     """ An invalid request has been made """
+
+
+class DiscourseRateLimitedError(DiscourseError):
+        """ Request required more than the permissible number of retries """
+

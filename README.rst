@@ -6,6 +6,11 @@ pydiscourse
     :alt: Build Status
     :target: http://travis-ci.org/bennylope/pydiscourse
 
+.. image:: https://img.shields.io/badge/Check%20out%20the-Docs-blue.svg
+    :alt: Check out the Docs
+    :target: https://pypi.org/project/pydiscourse/
+
+
 A Python library for working with Discourse.
 
 This is a fork of the original Tindie version. It was forked to include fixes,

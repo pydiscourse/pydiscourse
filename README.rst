@@ -2,9 +2,9 @@
 pydiscourse
 ===========
 
-.. image:: https://secure.travis-ci.org/bennylope/pydiscourse.svg?branch=master
+.. image:: https://github.com/bennylope/pydiscourse/workflows/Tests/badge.svg
     :alt: Build Status
-    :target: http://travis-ci.org/bennylope/pydiscourse
+    :target: https://github.com/bennylope/pydiscourse/actions
 
 .. image:: https://img.shields.io/badge/Check%20out%20the-Docs-blue.svg
     :alt: Check out the Docs

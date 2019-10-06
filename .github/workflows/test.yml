@@ -17,5 +17,7 @@ jobs:
       uses: actions/setup-python@v1
       with:
         python-version: ${{ matrix.py_version }}
+    - name: Install mock for Python 2.7
+      run: pip install mock
     - name: Run tests
       run: python setup.py test

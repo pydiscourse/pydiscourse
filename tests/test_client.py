@@ -1,10 +1,13 @@
 import sys
 import unittest
-import mock
+
+try:
+    from unittest import mock
+except ImportError:
+    import mock
 
 from pydiscourse import client
 
-import sys
 
 if sys.version_info < (3,):
 

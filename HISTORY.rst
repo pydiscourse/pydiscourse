@@ -3,6 +3,16 @@
 Release history
 ===============
 
+1.0.0 (2019-12-04)
+------------------
+
+This is a *potentially* breaking change if you're working with a significantly older Discourse deployment.
+It's not entirely clear if header based authentication has been available since day 1 or was introduced in
+a recent version (you should be fine! ... but caveat emptor).
+
+- Adds new invitation methods
+- Hard switch from query param based authorization to header-based authorization
+
 0.9.0
 -----
 

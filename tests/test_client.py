@@ -49,12 +49,12 @@ class ClientBaseTestCase(unittest.TestCase):
         self.assertEqual(args[0], verb)
         self.assertEqual(args[1], self.host + url)
 
-        kwargs = kwargs["params"]
-        self.assertEqual(kwargs.pop("api_username"), self.api_username)
-        self.assertEqual(kwargs.pop("api_key"), self.api_key)
+        headers = kwargs["headers"]
+        self.assertEqual(headers.pop("Api-Username"), self.api_username)
+        self.assertEqual(headers.pop("Api-Key"), self.api_key)
 
         if verb == "GET":
-            self.assertEqual(kwargs, params)
+            self.assertEqual(kwargs["params"], params)
 
 
 class TestClientRequests(ClientBaseTestCase):

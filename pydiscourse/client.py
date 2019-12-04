@@ -1350,12 +1350,13 @@ class DiscourseClient(object):
             dictionary of response body data or None
 
         """
-        params["api_key"] = self.api_key
-        if "api_username" not in params:
-            params["api_username"] = self.api_username
         url = self.host + path
 
-        headers = {"Accept": "application/json; charset=utf-8"}
+        headers = {
+            "Accept": "application/json; charset=utf-8",
+            "Api-Key": self.api_key,
+            "Api-Username": self.api_username,
+        }
 
         # How many times should we retry if rate limited
         retry_count = 4

@@ -371,7 +371,7 @@ class DiscourseClient(object):
         """
         return self._put(
             "/users/{0}/preferences/username".format(username),
-            username=new_username,
+            new_username=new_username,
             **kwargs
         )
 

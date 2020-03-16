@@ -1030,9 +1030,8 @@ class DiscourseClient(object):
             JSON API response
 
         """
-        return self._put(
-            "/admin/groups/{0}/owners.json".format(groupid), usernames=username
-        )
+        params = {"group[usernames]": username}
+        return self._put("/admin/groups/{0}/owners.json".format(groupid), **params)
 
     def delete_group_owner(self, groupid, userid):
         """

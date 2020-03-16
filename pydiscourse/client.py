@@ -999,6 +999,12 @@ class DiscourseClient(object):
 
         return self._post("/admin/groups", json=True, **kwargs)
 
+    def group_details(self, group_name):
+        """
+        Get all info of a group by group name
+        """
+        return self._get("/groups/{0}.json".format(group_name))
+
     def delete_group(self, groupid):
         """
         Deletes a group by its ID

@@ -999,6 +999,18 @@ class DiscourseClient(object):
 
         return self._post("/admin/groups", json=True, **kwargs)
 
+    def update_group(self, groupid, **kwargs):
+        """
+
+        Args:
+            groupid:
+            **kwargs:
+
+        Returns:
+
+        """
+        return self._put("/groups/{0}".format(groupid), json=True, **kwargs)
+
     def group_details(self, group_name):
         """
         Get all info of a group by group name

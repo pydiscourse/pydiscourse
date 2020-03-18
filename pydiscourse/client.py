@@ -8,6 +8,7 @@ import time
 import requests
 
 from datetime import timedelta, datetime
+from json.decoder import JSONDecodeError
 
 from pydiscourse.exceptions import (
     DiscourseError,
@@ -1407,11 +1408,17 @@ class DiscourseClient(object):
 
                 if 400 <= response.status_code < 500:
                     if 429 == response.status_code:
-                        # This codepath relies on wait_seconds from Discourse v2.0.0.beta3 / v1.9.3 or higher.
-                        rj = response.json()
-                        wait_delay = (
-                            retry_backoff + rj["extras"]["wait_seconds"]
-                        )  # how long to back off for.
+                        wait_delay = None
+                        try:
+                            # This codepath relies on wait_seconds from Discourse v2.0.0.beta3 / v1.9.3 or higher.
+                            rj = response.json()
+                            wait_delay = (
+                                retry_backoff + rj["extras"]["wait_seconds"]
+                            )  # how long to back off for.
+                            log.debug("API returned {0}".format(rj))
+                        except JSONDecodeError:
+                            # This codepath is for nginx rate limit errors. Manually set the retry_after to 2
+                            wait_delay = retry_backoff + 2
 
                         if retry_count > 1:
                             time.sleep(wait_delay)
@@ -1421,7 +1428,6 @@ class DiscourseClient(object):
                                 wait_delay, retry_count
                             )
                         )
-                        log.debug("API returned {0}".format(rj))
                         continue
                     else:
                         raise DiscourseClientError(msg, response=response)

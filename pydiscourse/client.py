@@ -551,6 +551,19 @@ class DiscourseClient(object):
         """
         return self._delete(u"/t/{0}".format(topic_id), **kwargs)
 
+    def watch_topic(self, topic_id, username, **kwargs):
+        """
+
+        Args:
+            topic_id:
+            **kwargs:
+
+        Returns:
+
+        """
+        self.api_username = username
+        return self._post("/t/{0}/notifications.json".format(topic_id), **kwargs)
+
     def post(self, topic_id, post_id, **kwargs):
         """
 

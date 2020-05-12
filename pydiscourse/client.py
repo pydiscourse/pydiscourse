@@ -954,12 +954,12 @@ class DiscourseClient(object):
         """
         return self._get("/groups/search.json", **kwargs)
 
-    def group(self, group_name, **kwargs):
+    def group(self, group_name):
         print("this ist my gydiscourse version")
         """
         Get all infos of a group by group name
         """
-        return self._get("/groups/{0}/members.json".format(group_name), **kwargs)
+        return self._get("/groups/{0}/members.json".format(group_name))
 
     def create_group(
         self,

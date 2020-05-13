@@ -198,14 +198,14 @@ class DiscourseClient(object):
         """
         return self._put("/admin/users/{0}/trust_level".format(userid), level=level)
 
-    def suspend(self, userid, duration, reason):
+    def suspend(self, userid, duration, reason): 
         """
         Suspend a user's account
 
         Args:
             userid: the Discourse user ID
             duration: the length of time in days for which a user's account
-                    should be suspended
+                    should be suspended (365000 for forever)
             reason: the reason for suspending the account
 
         Returns:
@@ -218,7 +218,7 @@ class DiscourseClient(object):
             suspend_until=suspend_until,
             reason=reason,
         )
-
+    
     def unsuspend(self, userid):
         """
         Unsuspends a user's account

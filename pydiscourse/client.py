@@ -489,7 +489,11 @@ class DiscourseClient(object):
             JSON API response
 
         """
-        return self._get("/c/{0}.json".format(category_id), **kwargs)
+        return self._get(
+            "/c/{0}.json".format(category_id),
+            request_kwargs={"allow_redirects": True},
+            **kwargs
+        )
 
     def hot_topics(self, **kwargs):
         """
@@ -1281,7 +1285,7 @@ class DiscourseClient(object):
         kwargs["parent_tag_name"] = parent_tag_name
         return self._post("/tag_groups", json=True, **kwargs)["tag_group"]
 
-    def _get(self, path, **kwargs):
+    def _get(self, path, request_kwargs={}, **kwargs):
         """
 
         Args:
@@ -1291,25 +1295,9 @@ class DiscourseClient(object):
         Returns:
 
         """
-        return self._request(GET, path, params=kwargs)
+        return self._request(GET, path, params=kwargs, request_kwargs=request_kwargs)
 
-    def _put(self, path, json=False, **kwargs):
-        """
-
-        Args:
-            path:
-            **kwargs:
-
-        Returns:
-
-        """
-        if not json:
-            return self._request(PUT, path, data=kwargs)
-
-        else:
-            return self._request(PUT, path, json=kwargs)
-
-    def _post(self, path, files={}, json=False, **kwargs):
+    def _put(self, path, json=False, request_kwargs={}, **kwargs):
         """
 
         Args:
@@ -1320,12 +1308,12 @@ class DiscourseClient(object):
 
         """
         if not json:
-            return self._request(POST, path, files=files, data=kwargs)
+            return self._request(PUT, path, data=kwargs, request_kwargs=request_kwargs)
 
         else:
-            return self._request(POST, path, files=files, json=kwargs)
+            return self._request(PUT, path, json=kwargs, request_kwargs=request_kwargs)
 
-    def _delete(self, path, **kwargs):
+    def _post(self, path, files={}, json=False, request_kwargs={}, **kwargs):
         """
 
         Args:
@@ -1335,9 +1323,27 @@ class DiscourseClient(object):
         Returns:
 
         """
-        return self._request(DELETE, path, params=kwargs)
+        if not json:
+            return self._request(POST, path, files=files, data=kwargs, request_kwargs=request_kwargs)
 
-    def _request(self, verb, path, params={}, files={}, data={}, json={}):
+        else:
+            return self._request(POST, path, files=files, json=kwargs, request_kwargs=request_kwargs)
+
+    def _delete(self, path, request_kwargs={}, **kwargs):
+        """
+
+        Args:
+            path:
+            **kwargs:
+
+        Returns:
+
+        """
+        return self._request(DELETE, path, params=kwargs, request_kwargs=request_kwargs)
+
+    def _request(
+        self, verb, path, params={}, files={}, data={}, json={}, request_kwargs={}
+    ):
         """
         Executes HTTP request to API and handles response
 
@@ -1345,6 +1351,7 @@ class DiscourseClient(object):
             verb: HTTP verb as string: GET, DELETE, PUT, POST
             path: the path on the Discourse API
             params: dictionary of parameters to include to the API
+            request_kwargs: dictionary of requests.request keyword arguments to override defaults
 
         Returns:
             dictionary of response body data or None
@@ -1364,9 +1371,7 @@ class DiscourseClient(object):
         retry_backoff = 1
 
         while retry_count > 0:
-            response = requests.request(
-                verb,
-                url,
+            default_kwargs = dict(
                 allow_redirects=False,
                 params=params,
                 files=files,
@@ -1375,6 +1380,11 @@ class DiscourseClient(object):
                 headers=headers,
                 timeout=self.timeout,
             )
+
+            overridden_kwargs = default_kwargs.copy()
+            overridden_kwargs.update(request_kwargs)
+
+            response = requests.request(verb, url, **overridden_kwargs)
 
             log.debug("response %s: %s", response.status_code, repr(response.text))
             if response.ok:

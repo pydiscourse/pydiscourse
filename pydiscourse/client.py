@@ -491,7 +491,7 @@ class DiscourseClient(object):
         """
         return self._get(
             "/c/{0}.json".format(category_id),
-            request_kwargs={"allow_redirects": True},
+            override_request_kwargs={"allow_redirects": True},
             **kwargs
         )
 
@@ -1285,7 +1285,7 @@ class DiscourseClient(object):
         kwargs["parent_tag_name"] = parent_tag_name
         return self._post("/tag_groups", json=True, **kwargs)["tag_group"]
 
-    def _get(self, path, request_kwargs={}, **kwargs):
+    def _get(self, path, override_request_kwargs=None, **kwargs):
         """
 
         Args:
@@ -1295,25 +1295,9 @@ class DiscourseClient(object):
         Returns:
 
         """
-        return self._request(GET, path, params=kwargs, request_kwargs=request_kwargs)
+        return self._request(GET, path, params=kwargs, override_request_kwargs=override_request_kwargs)
 
-    def _put(self, path, json=False, request_kwargs={}, **kwargs):
-        """
-
-        Args:
-            path:
-            **kwargs:
-
-        Returns:
-
-        """
-        if not json:
-            return self._request(PUT, path, data=kwargs, request_kwargs=request_kwargs)
-
-        else:
-            return self._request(PUT, path, json=kwargs, request_kwargs=request_kwargs)
-
-    def _post(self, path, files={}, json=False, request_kwargs={}, **kwargs):
+    def _put(self, path, json=False, override_request_kwargs=None, **kwargs):
         """
 
         Args:
@@ -1324,12 +1308,12 @@ class DiscourseClient(object):
 
         """
         if not json:
-            return self._request(POST, path, files=files, data=kwargs, request_kwargs=request_kwargs)
+            return self._request(PUT, path, data=kwargs, override_request_kwargs=override_request_kwargs)
 
         else:
-            return self._request(POST, path, files=files, json=kwargs, request_kwargs=request_kwargs)
+            return self._request(PUT, path, json=kwargs, override_request_kwargs=override_request_kwargs)
 
-    def _delete(self, path, request_kwargs={}, **kwargs):
+    def _post(self, path, files=None, json=False, override_request_kwargs=None, **kwargs):
         """
 
         Args:
@@ -1339,10 +1323,26 @@ class DiscourseClient(object):
         Returns:
 
         """
-        return self._request(DELETE, path, params=kwargs, request_kwargs=request_kwargs)
+        if not json:
+            return self._request(POST, path, files=files, data=kwargs, override_request_kwargs=override_request_kwargs)
+
+        else:
+            return self._request(POST, path, files=files, json=kwargs, override_request_kwargs=override_request_kwargs)
+
+    def _delete(self, path, override_request_kwargs=None, **kwargs):
+        """
+
+        Args:
+            path:
+            **kwargs:
+
+        Returns:
+
+        """
+        return self._request(DELETE, path, params=kwargs, override_request_kwargs=override_request_kwargs)
 
     def _request(
-        self, verb, path, params={}, files={}, data={}, json={}, request_kwargs={}
+        self, verb, path, params=None, files=None, data=None, json=None, override_request_kwargs=None
     ):
         """
         Executes HTTP request to API and handles response
@@ -1351,12 +1351,18 @@ class DiscourseClient(object):
             verb: HTTP verb as string: GET, DELETE, PUT, POST
             path: the path on the Discourse API
             params: dictionary of parameters to include to the API
-            request_kwargs: dictionary of requests.request keyword arguments to override defaults
+            override_request_kwargs: dictionary of requests.request keyword arguments to override defaults
 
         Returns:
             dictionary of response body data or None
 
         """
+        params = params or {}
+        files = files or {}
+        data = data or {}
+        json = json or {}
+        override_request_kwargs = override_request_kwargs or {}
+
         url = self.host + path
 
         headers = {
@@ -1371,7 +1377,7 @@ class DiscourseClient(object):
         retry_backoff = 1
 
         while retry_count > 0:
-            default_kwargs = dict(
+            request_kwargs = dict(
                 allow_redirects=False,
                 params=params,
                 files=files,
@@ -1381,10 +1387,9 @@ class DiscourseClient(object):
                 timeout=self.timeout,
             )
 
-            overridden_kwargs = default_kwargs.copy()
-            overridden_kwargs.update(request_kwargs)
+            request_kwargs.update(override_request_kwargs)
 
-            response = requests.request(verb, url, **overridden_kwargs)
+            response = requests.request(verb, url, **request_kwargs)
 
             log.debug("response %s: %s", response.status_code, repr(response.text))
             if response.ok:

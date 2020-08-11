@@ -949,7 +949,7 @@ class DiscourseClient(object):
         """
         Get all infos of a group by group name
         """
-        return self._get("/groups/{0}/members.json".format(group_name))
+        return self._get("/groups/{0}.json".format(group_name))
 
     def create_group(
         self,

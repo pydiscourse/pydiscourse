@@ -1357,10 +1357,6 @@ class DiscourseClient(object):
             dictionary of response body data or None
 
         """
-        params = params or {}
-        files = files or {}
-        data = data or {}
-        json = json or {}
         override_request_kwargs = override_request_kwargs or {}
 
         url = self.host + path

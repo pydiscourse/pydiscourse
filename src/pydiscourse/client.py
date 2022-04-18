@@ -942,6 +942,12 @@ class DiscourseClient(object):
         """
         return self._delete(u"/categories/{0}".format(category_id), **kwargs)
 
+    def get_site_info(self):
+        """
+        Get site info to fetch all categories and subcategories
+        """
+        return self._get("/site.json")
+
     def get_site_settings(self):
         """
         Get site settings

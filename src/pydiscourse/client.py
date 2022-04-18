@@ -909,25 +909,18 @@ class DiscourseClient(object):
         """
         return self._get("/categories.json", **kwargs)["category_list"]["categories"]
 
-    # Depecreated
-    # Returns a 302 on recent Discourse version
-    # Use category_topics instead
-    # See https://github.com/discourse/discourse_api/pull/94
-    def category(self, name, parent=None, **kwargs):
+    def category(self, category_id, **kwargs):
         """
 
         Args:
-            name:
-            parent:
+            category_id:
             **kwargs:
 
         Returns:
 
         """
-        if parent:
-            name = u"{0}/{1}".format(parent, name)
 
-        return self._get(u"/category/{0}.json".format(name), **kwargs)
+        return self._get(u"/c/{0}/show.json".format(category_id), **kwargs)
 
     def delete_category(self, category_id, **kwargs):
         """

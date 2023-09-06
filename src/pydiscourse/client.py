@@ -1500,6 +1500,12 @@ class DiscourseClient:
         """
         return self._post(f"/category/{category_id}/notifications", **kwargs)
 
+    def about(self):
+        """
+        Get site info
+        """
+        return self._get("/about.json")
+
     def _get(self, path, override_request_kwargs=None, **kwargs):
         """
 

@@ -205,3 +205,10 @@ class TestBadges:
 
         assert request_payload["username"] == ["username"]
         assert request_payload["badge_id"] == ["1"]
+
+
+class TestAbout:
+    def test_about(self, discourse_client, discourse_request):
+        request = discourse_request("get", "/about.json")
+        discourse_client.about()
+        assert request.called_once

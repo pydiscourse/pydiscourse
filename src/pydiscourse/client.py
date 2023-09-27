@@ -844,17 +844,17 @@ class DiscourseClient:
         kwargs = {"email": user_email, "topic_id": topic_id}
         return self._post(f"/t/{topic_id}/invite.json", **kwargs)
 
-    def search(self, term, **kwargs):
+    def search(self, q, **kwargs):
         """
 
         Args:
-            term:
+            q:
             **kwargs:
 
         Returns:
 
         """
-        kwargs["term"] = term
+        kwargs["q"] = q
         return self._get("/search.json", **kwargs)
 
     def badges(self, **kwargs):

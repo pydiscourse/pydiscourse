@@ -166,8 +166,8 @@ class TestPosts:
 
 class TestSearch:
     def test_search(self, discourse_client, discourse_request):
-        request = discourse_request("get", "/search.json?term=needle")
-        discourse_client.search(term="needle")
+        request = discourse_request("get", "/search.json?q=needle")
+        discourse_client.search(q="needle")
         assert request.called_once
 
 

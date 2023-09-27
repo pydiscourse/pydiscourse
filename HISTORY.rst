@@ -3,6 +3,13 @@
 Release history
 ===============
 
+
+1.7.0
+-----
+
+- Possible breaking change: Change `search()` term paramater from `term` to `q`,
+  fixes search. Thanks @weber-s
+
 1.6.1
 -----
 

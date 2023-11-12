@@ -2,11 +2,10 @@
 Core API client module
 """
 
-import logging
+import re
 import time
-
+import logging
 import requests
-
 from datetime import timedelta, datetime
 
 from pydiscourse.exceptions import (
@@ -25,6 +24,8 @@ DELETE = "DELETE"
 GET = "GET"
 POST = "POST"
 PUT = "PUT"
+
+ATTACHMENTS_REGEX = re.compile(r'<a.*?href="(.*?)".*?>|<img.*?src="(.*?)".*?>')
 
 
 def now() -> datetime:
@@ -604,6 +605,87 @@ class DiscourseClient:
 
         """
         return self._delete(f"/t/{topic_id}", **kwargs)
+    
+    def _topic_attachments_urls(self, slug, topic_id, **kwargs):
+        """
+
+        Args:
+            slug:
+            topic_id:
+            **kwargs:
+
+        Returns:
+            list of urls
+        """
+        topic = self.topic(slug, topic_id, **kwargs)
+        posts = [post['cooked'] for post in \
+                 topic['post_stream']['posts']]
+        attachments_urls = [ATTACHMENTS_REGEX.findall(post) for post in posts]
+        attachments_urls = {
+            group
+            for post in attachments_urls for match in post for group in match
+            if group
+        }
+
+        return attachments_urls
+
+    def topic_attachments_number(self, slug, topic_id, **kwargs):
+        """
+
+        Args:
+            slug:
+            topic_id:
+            **kwargs:
+
+        Returns:
+            number of attachments per topic
+        """
+        return len(self._topic_attachments_urls(slug, topic_id))
+
+    def topic_attachments(self, slug, topic_id, allowed_extensions=None, **kwargs):
+        """
+
+        Args:
+            slug:
+            topic_id:
+            allowed_extensions:
+            **kwargs:
+
+        Returns:
+            list of byte objects
+        """
+        urls = self._topic_attachments_urls(slug, topic_id)
+        urls = [
+            url.split(self.host.split('//')[-1])[-1]
+            for url in urls
+            if allowed_extensions is None or url.split('.')[-1] in allowed_extensions
+        ]
+
+        headers = {
+            "Api-Key": client.api_key,
+            "Api-Username": client.api_username,
+        }
+        request_kwargs = dict(
+            allow_redirects=False,
+            params=None,
+            files=None,
+            data=None,
+            json=None,
+            headers=headers,
+            timeout=self.timeout,
+        )
+        objects = [
+            (
+                self._get(
+                    url,
+                    override_request_kwargs=request_kwargs
+                ),
+                url.split('.')[-1]
+            )
+            for url in urls
+        ]
+        
+        return objects
 
     def post(self, topic_id, post_id, **kwargs):
         """
@@ -1707,6 +1789,9 @@ class DiscourseClient:
                 "Unexpected Redirect, invalid api key or host?",
                 response=response,
             )
+
+        if 'Accept' not in request_kwargs['headers']:
+            return response.content
 
         json_content = "application/json; charset=utf-8"
         content_type = response.headers["content-type"]

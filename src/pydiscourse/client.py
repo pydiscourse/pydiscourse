@@ -4,6 +4,7 @@ Core API client module
 
 import re
 import time
+
 import logging
 import requests
 from datetime import timedelta, datetime
@@ -606,9 +607,10 @@ class DiscourseClient:
         """
         return self._delete(f"/t/{topic_id}", **kwargs)
     
-    def _topic_attachments_urls(self, slug, topic_id, **kwargs):
+    def _get_topic_attachments_urls(self, slug, topic_id, **kwargs):
         """
-
+        Private function to get attachment URLs
+        
         Args:
             slug:
             topic_id:
@@ -629,9 +631,10 @@ class DiscourseClient:
 
         return attachments_urls
 
-    def topic_attachments_number(self, slug, topic_id, **kwargs):
+    def get_topic_attachments_number(self, slug, topic_id, **kwargs):
         """
-
+        Retrieve the number of attachments in the post
+        
         Args:
             slug:
             topic_id:
@@ -640,11 +643,12 @@ class DiscourseClient:
         Returns:
             number of attachments per topic
         """
-        return len(self._topic_attachments_urls(slug, topic_id))
+        return len(self._get_topic_attachments_urls(slug, topic_id))
 
-    def topic_attachments(self, slug, topic_id, allowed_extensions=None, **kwargs):
+    def download_topic_attachments(self, slug, topic_id, allowed_extensions=None, **kwargs):
         """
-
+        Return the body of attachments in the specified post with the associated extension
+        
         Args:
             slug:
             topic_id:
@@ -652,12 +656,13 @@ class DiscourseClient:
             **kwargs:
 
         Returns:
-            list of byte objects
+            list of tuples whose first element is the byte object and
+            second element is its extension
         """
-        urls = self._topic_attachments_urls(slug, topic_id)
-        urls = [
+        raw_urls = self._get_topic_attachments_urls(slug, topic_id)
+        cleaned_urls = [
             url.split(self.host.split('//')[-1])[-1]
-            for url in urls
+            for url in raw_urls
             if allowed_extensions is None or url.split('.')[-1] in allowed_extensions
         ]
 
@@ -682,7 +687,7 @@ class DiscourseClient:
                 ),
                 url.split('.')[-1]
             )
-            for url in urls
+            for url in cleaned_urls
         ]
         
         return objects

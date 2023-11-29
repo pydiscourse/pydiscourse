@@ -667,8 +667,8 @@ class DiscourseClient:
         ]
 
         headers = {
-            "Api-Key": client.api_key,
-            "Api-Username": client.api_username,
+            "Api-Key": self.api_key,
+            "Api-Username": self.api_username,
         }
         request_kwargs = dict(
             allow_redirects=False,

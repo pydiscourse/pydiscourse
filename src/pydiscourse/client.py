@@ -2,10 +2,10 @@
 Core API client module
 """
 
+import logging
 import re
 import time
 
-import logging
 import requests
 from datetime import timedelta, datetime
 
@@ -606,11 +606,11 @@ class DiscourseClient:
 
         """
         return self._delete(f"/t/{topic_id}", **kwargs)
-    
+
     def _get_topic_attachments_urls(self, slug, topic_id, **kwargs):
         """
         Private function to get attachment URLs
-        
+
         Args:
             slug:
             topic_id:
@@ -634,7 +634,7 @@ class DiscourseClient:
     def get_topic_attachments_number(self, slug, topic_id, **kwargs):
         """
         Retrieve the number of attachments in the post
-        
+
         Args:
             slug:
             topic_id:
@@ -648,7 +648,7 @@ class DiscourseClient:
     def download_topic_attachments(self, slug, topic_id, allowed_extensions=None, **kwargs):
         """
         Return the body of attachments in the specified post with the associated extension
-        
+
         Args:
             slug:
             topic_id:
@@ -683,13 +683,13 @@ class DiscourseClient:
             (
                 self._get(
                     url,
-                    override_request_kwargs=request_kwargs
+                    override_request_kwargs=request_kwargs,
                 ),
-                url.split('.')[-1]
+                url.split('.')[-1],
             )
             for url in cleaned_urls
         ]
-        
+
         return objects
 
     def post(self, topic_id, post_id, **kwargs):

@@ -7,6 +7,7 @@ import re
 import time
 
 import requests
+
 from datetime import timedelta, datetime
 
 from pydiscourse.exceptions import (

@@ -230,6 +230,17 @@ class DiscourseClient:
         """
         return self._put(f"/admin/users/{userid}/trust_level", level=level)
 
+    def anonymize(self, userid):
+        """
+
+        Args:
+            userid: the Discourse user ID
+
+        Returns:
+
+        """
+        return self._put(f"/admin/users/{userid}/anonymize")
+
     def suspend(self, userid, duration, reason):
         """
         Suspend a user's account

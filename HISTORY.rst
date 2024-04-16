@@ -9,6 +9,7 @@ Release history
 
 - Possible breaking change: Change `search()` term paramater from `term` to `q`,
   fixes search. Thanks @weber-s
+- Add support for Python 3.12
 
 1.6.1
 -----

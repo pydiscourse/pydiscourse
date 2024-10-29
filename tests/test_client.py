@@ -114,6 +114,21 @@ class TestUserManagement:
 
         assert request.called_once
 
+class TestPrivateMessages:
+    def test_private_messages(self, discourse_client, discourse_request):
+        request = discourse_request("get", "/topics/private-messages/myusername.json")
+        discourse_client.private_messages("myusername")
+        assert request.called_once
+
+    def test_private_messages_unread(self, discourse_client, discourse_request):
+        request = discourse_request("get", "/topics/private-messages-unread/myusername.json")
+        discourse_client.private_messages_unread("myusername")
+        assert request.called_once
+
+    def test_private_messages_sent(self, discourse_client, discourse_request):
+        request = discourse_request("get", "/topics/private-messages-sent/myusername.json")
+        discourse_client.private_messages_sent("myusername")
+        assert request.called_once
 
 class TestTopics:
     def test_hot_topics(self, discourse_client, discourse_request):

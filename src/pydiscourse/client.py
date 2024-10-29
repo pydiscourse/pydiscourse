@@ -542,6 +542,33 @@ class DiscourseClient:
             username = self.api_username
         return self._get(f"/topics/private-messages-sent/{username}.json", **kwargs)
 
+    def send_private_message(
+            self,
+            content,
+            title,
+            target_usernames,
+            **kwargs,
+    ):
+        """
+
+        Args:
+            content:
+            title:
+            target_usernames:
+            **kwargs:
+
+        Returns:
+
+        """
+        return self._post(
+            "/posts",
+            raw=content,
+            title=title,
+            target_recipients=target_usernames,
+            archetype="private_message",
+            **kwargs,
+        )
+
     def category_topics(self, category_id, **kwargs):
         """
         Returns a list of all topics in a category.

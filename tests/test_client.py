@@ -130,6 +130,11 @@ class TestPrivateMessages:
         discourse_client.private_messages_sent("myusername")
         assert request.called_once
 
+    def test_send_private_message(self, discourse_client, discourse_request):
+        request = discourse_request("post", "/posts")
+        discourse_client.send_private_message("content", "title", "username")
+        assert request.called_once
+
 class TestTopics:
     def test_hot_topics(self, discourse_client, discourse_request):
         request = discourse_request("get", "/hot.json")

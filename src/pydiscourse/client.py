@@ -737,6 +737,18 @@ class DiscourseClient:
         """
         return self._get(f"/t/{topic_id}/posts.json", **kwargs)
 
+    def topic_raw(self, topic_id, **kwargs):
+        """
+
+        Args:
+            topic_id:
+            **kwargs:
+
+        Returns:
+
+        """
+        return self._get(f"/raw/{topic_id}", **kwargs)
+
     def update_topic(self, topic_url, title, **kwargs):
         """
         Update a topic

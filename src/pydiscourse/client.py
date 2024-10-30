@@ -1726,6 +1726,9 @@ class DiscourseClient:
             if not response.content.strip():
                 return None
 
+            elif content_type == "text/plain; charset=utf-8":
+                return response.text
+
             raise DiscourseError(
                 f'Invalid Response, expecting "{json_content}" got "{content_type}"',
                 response=response,

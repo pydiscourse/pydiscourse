@@ -672,6 +672,19 @@ class DiscourseClient:
         """
         return self._get(f"/posts/by_number/{topic_id}/{post_number}", **kwargs)
 
+    def post_raw_by_number(self, topic_id, post_number, **kwargs):
+        """
+        Get a post from its number inside a specific topic
+        Args:
+            topic_id: the topic the post belongs to
+            post_number: the number of the post inside the topic
+            **kwargs:
+
+        Returns:
+            post
+        """
+        return self._get(f"/raw/{topic_id}/{post_number}", **kwargs)
+
     def posts(self, topic_id, post_ids=None, **kwargs):
         """
         Get a set of posts from a topic
@@ -736,6 +749,18 @@ class DiscourseClient:
 
         """
         return self._get(f"/t/{topic_id}/posts.json", **kwargs)
+
+    def topic_raw(self, topic_id, **kwargs):
+        """
+
+        Args:
+            topic_id:
+            **kwargs:
+
+        Returns:
+
+        """
+        return self._get(f"/raw/{topic_id}", **kwargs)
 
     def update_topic(self, topic_url, title, **kwargs):
         """
@@ -1725,6 +1750,9 @@ class DiscourseClient:
             # some calls return empty html documents
             if not response.content.strip():
                 return None
+
+            elif content_type == "text/plain; charset=utf-8":
+                return response.text
 
             raise DiscourseError(
                 f'Invalid Response, expecting "{json_content}" got "{content_type}"',

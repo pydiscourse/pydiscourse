@@ -602,6 +602,18 @@ class DiscourseClient:
         """
         return self._get(f"/t/{slug}/{topic_id}.json", **kwargs)
 
+    def topic_by_id(self, topic_id, **kwargs):
+        """
+
+        Args:
+            topic_id:
+            **kwargs:
+
+        Returns:
+
+        """
+        return self._get(f"/t/{topic_id}.json", **kwargs)
+
     def delete_topic(self, topic_id, **kwargs):
         """
         Remove a topic

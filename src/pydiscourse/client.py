@@ -672,6 +672,19 @@ class DiscourseClient:
         """
         return self._get(f"/posts/by_number/{topic_id}/{post_number}", **kwargs)
 
+    def post_raw_by_number(self, topic_id, post_number, **kwargs):
+        """
+        Get a post from its number inside a specific topic
+        Args:
+            topic_id: the topic the post belongs to
+            post_number: the number of the post inside the topic
+            **kwargs:
+
+        Returns:
+            post
+        """
+        return self._get(f"/raw/{topic_id}/{post_number}", **kwargs)
+
     def posts(self, topic_id, post_ids=None, **kwargs):
         """
         Get a set of posts from a topic

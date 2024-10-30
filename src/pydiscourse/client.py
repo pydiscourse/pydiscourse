@@ -38,7 +38,7 @@ def now() -> datetime:
 class DiscourseClient:
     """Discourse API client"""
 
-    def __init__(self, host, api_username, api_key, timeout=None):
+    def __init__(self, host, api_username, api_key, auth_type=None, timeout=None):
         """
         Initialize the client
 
@@ -54,6 +54,7 @@ class DiscourseClient:
         self.host = host
         self.api_username = api_username
         self.api_key = api_key
+        self.auth_type = auth_type
         self.timeout = timeout
 
     def user(self, username):
@@ -1641,11 +1642,18 @@ class DiscourseClient:
 
         url = self.host + path
 
-        headers = {
-            "Accept": "application/json; charset=utf-8",
-            "Api-Key": self.api_key,
-            "Api-Username": self.api_username,
-        }
+        if self.auth_type == "user":
+            headers = {
+                "Accept": "application/json; charset=utf-8",
+                "User-Api-Key": self.api_key,
+                "User-Api-Username": self.api_username,
+            }
+        else:
+            headers = {
+                "Accept": "application/json; charset=utf-8",
+                "Api-Key": self.api_key,
+                "Api-Username": self.api_username,
+            }
 
         # How many times should we retry if rate limited
         retry_count = 4

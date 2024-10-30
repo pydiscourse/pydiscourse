@@ -737,6 +737,26 @@ class DiscourseClient:
         """
         return self._get(f"/t/{topic_id}/posts.json", **kwargs)
 
+    def topic_all_posts(self, topic_id, **kwargs):
+        """
+
+        Args:
+            topic_id:
+            **kwargs:
+
+        Returns:
+
+        """
+        topic = self._get(f"/t/{topic_id}.json", **kwargs)
+        trunc = int(topic["posts_count"] / 20)
+        num_pages = trunc if (topic["posts_count"] % 20 == 0) else trunc + 1
+        for i in range(2, num_pages + 1):
+            page = self._get(f"/t/{topic_id}.json?page={str(i)}", **kwargs)
+            topic["post_stream"]["posts"] = (
+                    topic["post_stream"]["posts"] + page["post_stream"]["posts"]
+            )
+        return topic
+
     def update_topic(self, topic_url, title, **kwargs):
         """
         Update a topic

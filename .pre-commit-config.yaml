@@ -4,10 +4,13 @@ fail_fast: true
 
 repos:
 
-  - repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: "v0.0.286"
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: "v0.9.7"
     hooks:
+      # Run the linter.
       - id: ruff
+        # Run the formatter.
+      - id: ruff-format
 
   - repo: https://github.com/psf/black
     rev: 23.7.0

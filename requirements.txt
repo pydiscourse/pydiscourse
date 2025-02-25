@@ -1,5 +1,5 @@
 pre-commit==3.3.3
-ruff==0.0.286
+ruff==0.9.7
 pytest==7.4.0
 pytest-cov==4.1.0
 pytest-mock==3.11.1  # https://github.com/pytest-dev/pytest-mock/

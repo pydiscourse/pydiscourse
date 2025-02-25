@@ -6,9 +6,9 @@ pydiscourse
    :alt: PyPI
    :target: https://pypi.org/project/pydiscourse/
 
-.. image:: https://github.com/bennylope/pydiscourse/workflows/Tests/badge.svg
+.. image:: https://github.com/pydiscourse/pydiscourse/workflows/Tests/badge.svg
     :alt: Build Status
-    :target: https://github.com/bennylope/pydiscourse/actions
+    :target: https://github.com/pydiscourse/pydiscourse/actions
 
 .. image:: https://img.shields.io/badge/Check%20out%20the-Docs-blue.svg
     :alt: Check out the Docs

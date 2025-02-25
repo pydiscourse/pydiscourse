@@ -2,6 +2,10 @@
 pydiscourse
 ===========
 
+.. image:: https://img.shields.io/pypi/v/pydiscourse?color=blue
+   :alt: PyPI
+   :target: https://pypi.org/project/pydiscourse/
+
 .. image:: https://github.com/bennylope/pydiscourse/workflows/Tests/badge.svg
     :alt: Build Status
     :target: https://github.com/bennylope/pydiscourse/actions
